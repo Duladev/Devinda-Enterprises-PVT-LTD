@@ -1,0 +1,112 @@
+<%- include('../partials/header', { title: facility.id ? 'Edit Facility' :
+'Add Facility' }) %>
+
+<h4 class="mb-3"><%= facility.id ? 'Edit Facility' : 'Add Facility' %></h4>
+
+<div class="card p-4" style="max-width: 800px;">
+    <form action="<%= action %>" method="<%= method %>">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Bank Account</label>
+                <select name="account_id" class="form-select">
+                    <option value>No linked account</option>
+                    <% accounts.forEach(account => { %>
+                    <option value="<%= account.id %>"
+                        <%=String(facility.account_id) === String(account.id) ?
+                        'selected' : '' %>><%= account.name %> - <%=
+                        account.bank_name %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Facility Name</label>
+                <input type="text" name="name" class="form-control"
+                    value="<%= facility.name || '' %>" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Facility Type</label>
+                <select name="facility_type" class="form-select">
+                    <option value="Loan" <%=facility.facility_type === 'Loan' ?
+                        'selected' : '' %>>Loan</option>
+                    <option value="Overdraft" <%=facility.facility_type ===
+                        'Overdraft' ? 'selected' : '' %>>Overdraft</option>
+                    <option value="Credit Limit" <%=facility.facility_type ===
+                        'Credit Limit' ? 'selected' : '' %>>Credit
+                        Limit</option>
+                    <option value="Guarantee" <%=facility.facility_type ===
+                        'Guarantee' ? 'selected' : '' %>>Guarantee</option>
+                    <option value="Lease" <%=facility.facility_type === 'Lease'
+                        ? 'selected' : '' %>>Lease</option>
+                    <option value="Other" <%=facility.facility_type === 'Other'
+                        ? 'selected' : '' %>>Other</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Provider</label>
+                <input type="text" name="provider" class="form-control"
+                    value="<%= facility.provider || '' %>">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Principal Amount</label>
+                <input type="number" step="0.01" name="principal_amount"
+                    class="form-control"
+                    value="<%= facility.principal_amount || 0 %>">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Outstanding Amount</label>
+                <input type="number" step="0.01" name="outstanding_amount"
+                    class="form-control"
+                    value="<%= facility.outstanding_amount || 0 %>">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Interest Rate (%)</label>
+                <input type="number" step="0.01" name="interest_rate"
+                    class="form-control"
+                    value="<%= facility.interest_rate || 0 %>">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Installment Amount</label>
+                <input type="number" step="0.01" name="installment_amount"
+                    class="form-control"
+                    value="<%= facility.installment_amount || 0 %>">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="Active" <%=facility.status === 'Active' ?
+                        'selected' : '' %>>Active</option>
+                    <option value="Closed" <%=facility.status === 'Closed' ?
+                        'selected' : '' %>>Closed</option>
+                    <option value="Default" <%=facility.status === 'Default' ?
+                        'selected' : '' %>>Default</option>
+                    <option value="Under Review" <%=facility.status ===
+                        'Under Review' ? 'selected' : '' %>>Under
+                        Review</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Start Date</label>
+                <input type="date" name="start_date" class="form-control"
+                    value="<%= facility.start_date ? facility.start_date.toISOString ? facility.start_date.toISOString().slice(0,10) : facility.start_date.slice(0,10) : '' %>">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">End Date</label>
+                <input type="date" name="end_date" class="form-control"
+                    value="<%= facility.end_date ? facility.end_date.toISOString ? facility.end_date.toISOString().slice(0,10) : facility.end_date.slice(0,10) : '' %>">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Notes</label>
+                <textarea name="notes" class="form-control"
+                    rows="3"><%= facility.notes || '' %></textarea>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="/bank-facilities"
+                class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>

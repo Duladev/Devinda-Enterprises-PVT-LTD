@@ -1,0 +1,154 @@
+<%- include('partials/header', { title: 'Dashboard' }) %>
+
+<main class="dashboard-content">
+  <img src="/images/logo.png" alt class="dashboard-watermark"
+    aria-hidden="true">
+  <h4 class="mb-4">Dashboard</h4>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="stat-card bg-navy">
+        <div class="label">Sales Today</div>
+        <h3>LKR <%= Number(salesToday).toLocaleString('en-LK',
+          {minimumFractionDigits:2}) %></h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="stat-card bg-accent">
+        <div class="label">Sales This Month</div>
+        <h3>LKR <%= Number(salesThisMonth).toLocaleString('en-LK',
+          {minimumFractionDigits:2}) %></h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="stat-card bg-teal">
+        <div class="label">Purchases This Month</div>
+        <h3>LKR <%= Number(purchasesThisMonth).toLocaleString('en-LK',
+          {minimumFractionDigits:2}) %></h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="stat-card bg-danger-soft">
+        <div class="label">Customer Outstanding</div>
+        <h3>LKR <%= Number(outstandingBalance).toLocaleString('en-LK',
+          {minimumFractionDigits:2}) %></h3>
+        <div class="stat-note"><%= outstandingInvoices %> unpaid or partially
+          paid invoice<%= outstandingInvoices === 1 ? '' : 's' %></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <div class="text-muted small">Products</div>
+        <h4><%= totalProducts %></h4>
+        <a href="/products" class="small">View Inventory &rarr;</a>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <div class="text-muted small">Employees</div>
+        <h4><%= totalEmployees %></h4>
+        <a href="/employees" class="small">View Employees &rarr;</a>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <div class="text-muted small">Directors</div>
+        <h4><%= totalDirectors %></h4>
+        <a href="/directors" class="small">View Directors &rarr;</a>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <div class="text-muted small">Shareholders</div>
+        <h4><%= totalShareholders %></h4>
+        <a href="/shareholders" class="small">View Shareholders &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <div class="text-muted small">Assets</div>
+        <h4><%= totalAssets %></h4>
+        <a href="/assets" class="small">View Assets &rarr;</a>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <div class="text-muted small">Buyers</div>
+        <h4><%= totalBuyers %></h4>
+        <a href="/buyers" class="small">View Buyers &rarr;</a>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <div class="text-muted small">Sellers</div>
+        <h4><%= totalSellers %></h4>
+        <a href="/sellers" class="small">View Sellers &rarr;</a>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <div class="text-muted small">Company</div>
+        <h4>Profile</h4>
+        <span class="small text-muted">Records overview</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card p-3">
+        <h6 class="mb-3">Low Stock Alerts</h6>
+        <% if (lowStock.length === 0) { %>
+        <p class="text-muted small">All products are sufficiently stocked.</p>
+        <% } else { %>
+        <table class="table table-sm">
+          <thead><tr><th>Product</th><th>Stock</th><th>Reorder
+                Level</th></tr></thead>
+          <tbody>
+            <% lowStock.forEach(p => { %>
+            <tr>
+              <td><%= p.name %></td>
+              <td><span class="badge badge-low-stock text-white"><%=
+                  p.current_stock %> <%= p.unit %></span></td>
+              <td><%= p.reorder_level %> <%= p.unit %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% } %>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card p-3">
+        <h6 class="mb-3">Recent Sales</h6>
+        <% if (recentSales.length === 0) { %>
+        <p class="text-muted small">No sales recorded yet.</p>
+        <% } else { %>
+        <table class="table table-sm">
+          <thead><tr><th>Invoice</th><th>Buyer</th><th>Amount</th><th></th></tr></thead>
+          <tbody>
+            <% recentSales.forEach(s => { %>
+            <tr>
+              <td><%= s.invoice_no %></td>
+              <td><%= s.buyer_name || 'Walk-in' %></td>
+              <td>LKR <%= Number(s.total_amount).toLocaleString('en-LK',
+                {minimumFractionDigits:2}) %></td>
+              <td><a href="/sales/<%= s.id %>" class="small">View</a></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<%- include('partials/footer') %>

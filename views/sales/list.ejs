@@ -1,0 +1,37 @@
+<%- include('../partials/header', { title: 'Sales' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Sales</h4>
+  <a href="/sales/new" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> New Sale</a>
+</div>
+
+<div class="card p-3">
+  <table class="table table-hover align-middle">
+    <thead><tr><th>Invoice No</th><th>Buyer</th><th>Date</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    <% sales.forEach(s => { %>
+      <tr>
+        <td><%= s.invoice_no %></td>
+        <td><%= s.buyer_name || 'Walk-in' %></td>
+        <td><%= new Date(s.sale_date).toLocaleDateString('en-GB') %></td>
+        <td><%= Number(s.total_amount).toFixed(2) %></td>
+        <td><%= Number(s.paid_amount).toFixed(2) %></td>
+        <td><%= Number(s.balance).toFixed(2) %></td>
+        <td><span class="badge bg-<%= s.payment_status === 'Paid' ? 'success' : s.payment_status === 'Partial' ? 'warning' : 'danger' %>"><%= s.payment_status %></span></td>
+        <td class="text-end">
+          <a href="/sales/<%= s.id %>" class="btn btn-sm btn-outline-primary">View</a>
+          <a href="/invoices/<%= s.id %>" target="_blank" class="btn btn-sm btn-outline-dark"><i class="bi bi-file-earmark-pdf"></i></a>
+          <form action="/sales/<%= s.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this sale? Stock will be reversed.');">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+    <% if (sales.length === 0) { %>
+      <tr><td colspan="8" class="text-center text-muted">No sales recorded yet.</td></tr>
+    <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

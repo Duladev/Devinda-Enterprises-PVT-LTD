@@ -1,0 +1,57 @@
+<%- include('../partials/header', { title: 'Cheques' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Cheques</h4>
+    <a href="/cheques/new" class="btn btn-primary btn-sm"><i
+            class="bi bi-plus-lg"></i> Add Cheque</a>
+</div>
+
+<form class="mb-3" method="GET">
+    <input type="text" name="q" value="<%= search %>" class="form-control"
+        placeholder="Search by cheque no, payee, bank or account...">
+</form>
+
+<div class="card p-3">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Cheque No</th>
+                <th>Account</th>
+                <th>Payee</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% cheques.forEach(item => { %>
+            <tr>
+                <td><%= item.cheque_no %></td>
+                <td><%= item.account_name || '-' %></td>
+                <td><%= item.payee || '-' %></td>
+                <td>LKR <%= Number(item.amount || 0).toLocaleString('en-LK', {
+                    minimumFractionDigits: 2 }) %></td>
+                <td><span class="badge bg-light text-dark"><%= item.status ||
+                        'Pending' %></span></td>
+                <td class="text-end">
+                    <a href="/cheques/<%= item.id %>/edit"
+                        class="btn btn-sm btn-outline-secondary"><i
+                            class="bi bi-pencil"></i></a>
+                    <form action="/cheques/<%= item.id %>?_method=DELETE"
+                        method="POST" class="d-inline"
+                        onsubmit="return confirm('Delete this cheque?');">
+                        <button class="btn btn-sm btn-outline-danger"><i
+                                class="bi bi-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+            <% if (cheques.length === 0) { %>
+            <tr><td colspan="6" class="text-center text-muted">No cheques
+                    found.</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../partials/footer') %>

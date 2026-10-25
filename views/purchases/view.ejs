@@ -1,0 +1,72 @@
+<%- include('../partials/header', { title: purchase.purchase_no }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Purchase: <%= purchase.purchase_no %></h4>
+  <div>
+    <a href="/purchases/<%= purchase.id %>/pdf" target="_blank"
+      class="btn btn-dark btn-sm"><i class="bi bi-file-earmark-pdf"></i>
+      Purchase Order</a>
+    <% if (purchase.seller_phone) { %><a
+      href="https://wa.me/<%= purchase.seller_phone.replace(/\D/g, '') %>?text=<%= encodeURIComponent('Purchase order ' + purchase.purchase_no + ': ' + appUrl + '/purchases/' + purchase.id + '/pdf') %>"
+      target="_blank" class="btn btn-success btn-sm"><i
+        class="bi bi-whatsapp"></i> Send WhatsApp</a><% } %>
+    <% if (purchase.seller_email) { %><a
+      href="mailto:<%= purchase.seller_email %>?subject=<%= encodeURIComponent('Purchase Order ' + purchase.purchase_no) %>&body=<%= encodeURIComponent('Please find the purchase order here: ' + purchase.purchase_no + '\n' + appUrl + '/purchases/' + purchase.id + '/pdf') %>"
+      class="btn btn-primary btn-sm"><i class="bi bi-envelope"></i> Send
+      Email</a><% } %>
+    <a href="/purchases" class="btn btn-outline-secondary btn-sm">Back to
+      list</a>
+  </div>
+</div>
+
+<div class="card p-3 mb-3">
+  <div class="row">
+    <div class="col-md-3"><strong>Seller:</strong> <%= purchase.seller_name ||
+      'N/A' %></div>
+    <div class="col-md-3"><strong>Phone:</strong> <%= purchase.seller_phone ||
+      '-' %></div>
+    <div class="col-md-3"><strong>Date:</strong> <%= new
+      Date(purchase.purchase_date).toLocaleDateString('en-GB') %></div>
+    <div class="col-md-3"><strong>Address:</strong> <%= purchase.seller_address
+      || '-' %></div>
+    <div class="col-md-3"><strong>Payment:</strong> <%= purchase.payment_method
+      || 'Cash' %></div>
+  </div>
+</div>
+
+<div class="card p-3 mb-3">
+  <table class="table table-sm">
+    <thead><tr><th>Product</th><th>Quantity</th><th>Unit Price</th><th
+          class="text-end">Subtotal</th></tr></thead>
+    <tbody>
+      <% items.forEach(i => { %>
+      <tr>
+        <td><%= i.product_name %></td>
+        <td><%= i.quantity %> <%= i.unit %></td>
+        <td><%= Number(i.unit_price).toFixed(2) %></td>
+        <td class="text-end"><%= Number(i.subtotal).toFixed(2) %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <div class="text-end">
+    <p class="mb-1">Subtotal: <strong>LKR <%= Number((purchase.total_amount ||
+        0) + (purchase.discount_amount || 0)).toFixed(2) %></strong></p>
+    <p class="mb-1">Discount: <strong>LKR <%= Number(purchase.discount_amount ||
+        0).toFixed(2) %></strong></p>
+    <p class="mb-1">Total: <strong>LKR <%=
+        Number(purchase.total_amount).toFixed(2) %></strong></p>
+    <p class="mb-1">Paid: <strong>LKR <%=
+        Number(purchase.paid_amount).toFixed(2) %></strong></p>
+    <p class="mb-0">Balance: <strong>LKR <%= Number(purchase.balance).toFixed(2)
+        %></strong></p>
+  </div>
+</div>
+
+<% if (purchase.notes) { %>
+<div class="card p-3">
+  <strong>Notes:</strong> <%= purchase.notes %>
+</div>
+<% } %>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,46 @@
+<%- include('../partials/header', { title: 'Directors' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Directors</h4>
+    <a href="/directors/new" class="btn btn-primary btn-sm"><i
+            class="bi bi-plus-lg"></i> Add Director</a>
+</div>
+
+<form class="mb-3" method="GET">
+    <input type="text" name="q" value="<%= search %>" class="form-control"
+        placeholder="Search by name, designation, phone or email...">
+</form>
+
+<div class="card p-3">
+    <table class="table table-hover align-middle">
+        <thead><tr><th>Name</th><th>Designation</th><th>Phone</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+            <% directors.forEach(d => { %>
+            <tr>
+                <td><a href="/directors/<%= d.id %>"><%= d.name %></a></td>
+                <td><%= d.designation || '-' %></td>
+                <td><%= d.phone || '-' %></td>
+                <td><span class="badge bg-light text-dark"><%= d.status ||
+                        'Active' %></span></td>
+                <td class="text-end">
+                    <a href="/directors/<%= d.id %>/edit"
+                        class="btn btn-sm btn-outline-secondary"><i
+                            class="bi bi-pencil"></i></a>
+                    <form action="/directors/<%= d.id %>?_method=DELETE"
+                        method="POST" class="d-inline"
+                        onsubmit="return confirm('Delete this director?');">
+                        <button class="btn btn-sm btn-outline-danger"><i
+                                class="bi bi-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+            <% if (directors.length === 0) { %>
+            <tr><td colspan="5" class="text-center text-muted">No directors
+                    found.</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../partials/footer') %>

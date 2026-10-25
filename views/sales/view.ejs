@@ -1,0 +1,74 @@
+<%- include('../partials/header', { title: sale.invoice_no }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Invoice: <%= sale.invoice_no %></h4>
+  <div>
+    <a href="/invoices/<%= sale.id %>" target="_blank"
+      class="btn btn-dark btn-sm"><i class="bi bi-file-earmark-pdf"></i> View /
+      Print Invoice</a>
+    <% if (sale.buyer_phone) { %><a
+      href="https://wa.me/<%= sale.buyer_phone.replace(/\D/g, '') %>?text=<%= encodeURIComponent('Invoice ' + sale.invoice_no + ': ' + appUrl + '/invoices/' + sale.id) %>"
+      target="_blank" class="btn btn-success btn-sm"><i
+        class="bi bi-whatsapp"></i> Send WhatsApp</a><% } %>
+    <% if (sale.buyer_email) { %><a
+      href="mailto:<%= sale.buyer_email %>?subject=<%= encodeURIComponent('Invoice ' + sale.invoice_no) %>&body=<%= encodeURIComponent('Please find your invoice here: ' + appUrl + '/invoices/' + sale.id) %>"
+      class="btn btn-primary btn-sm"><i class="bi bi-envelope"></i> Send
+      Email</a><% } %>
+    <a href="/sales" class="btn btn-outline-secondary btn-sm">Back to list</a>
+  </div>
+</div>
+
+<div class="card p-3 mb-3">
+  <div class="row">
+    <div class="col-md-3"><strong>Buyer:</strong> <%= sale.buyer_name ||
+      'Walk-in Customer' %></div>
+    <div class="col-md-3"><strong>Phone:</strong> <%= sale.buyer_phone || '-'
+      %></div>
+    <div class="col-md-3"><strong>Date:</strong> <%= new
+      Date(sale.sale_date).toLocaleDateString('en-GB') %></div>
+    <div class="col-md-3"><strong>Status:</strong>
+      <span
+        class="badge bg-<%= sale.payment_status === 'Paid' ? 'success' : sale.payment_status === 'Partial' ? 'warning' : 'danger' %>"><%=
+        sale.payment_status %></span>
+    </div>
+    <div class="col-md-3"><strong>Payment:</strong> <%= sale.payment_method ||
+      'Cash' %></div>
+  </div>
+</div>
+
+<div class="card p-3 mb-3">
+  <table class="table table-sm">
+    <thead><tr><th>Product</th><th>Quantity</th><th>Unit Price</th><th
+          class="text-end">Subtotal</th></tr></thead>
+    <tbody>
+      <% items.forEach(i => { %>
+      <tr>
+        <td><%= i.product_name %></td>
+        <td><%= i.quantity %> <%= i.unit %></td>
+        <td><%= Number(i.unit_price).toFixed(2) %></td>
+        <td class="text-end"><%= Number(i.subtotal).toFixed(2) %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <div class="text-end">
+    <p class="mb-1">Subtotal: <strong>LKR <%= Number((sale.total_amount || 0) +
+        (sale.discount_amount || 0)).toFixed(2) %></strong></p>
+    <p class="mb-1">Discount: <strong>LKR <%= Number(sale.discount_amount ||
+        0).toFixed(2) %></strong></p>
+    <p class="mb-1">Total: <strong>LKR <%= Number(sale.total_amount).toFixed(2)
+        %></strong></p>
+    <p class="mb-1">Paid: <strong>LKR <%= Number(sale.paid_amount).toFixed(2)
+        %></strong></p>
+    <p class="mb-0">Balance: <strong>LKR <%= Number(sale.balance).toFixed(2)
+        %></strong></p>
+  </div>
+</div>
+
+<% if (sale.notes) { %>
+<div class="card p-3">
+  <strong>Notes:</strong> <%= sale.notes %>
+</div>
+<% } %>
+
+<%- include('../partials/footer') %>

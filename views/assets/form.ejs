@@ -1,0 +1,147 @@
+<%- include('../partials/header', { title: asset.id ? 'Edit Asset' : 'Add Asset'
+}) %>
+
+<h4 class="mb-3"><%= asset.id ? 'Edit Asset' : 'Add Asset' %></h4>
+
+<div class="card p-4" style="max-width: 920px;">
+    <form action="<%= action %>" method="<%= method %>">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Asset Name *</label>
+                <input type="text" name="name" class="form-control"
+                    value="<%= asset.name || '' %>" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Category</label>
+                <select name="category" class="form-select">
+                    <option value="Equipment" <%=(asset.category || 'Equipment')
+                        === 'Equipment' ? 'selected' : '' %>>Equipment</option>
+                    <option value="Vehicle" <%=asset.category === 'Vehicle' ?
+                        'selected' : '' %>>Vehicle</option>
+                    <option value="Furniture" <%=asset.category === 'Furniture'
+                        ? 'selected' : '' %>>Furniture</option>
+                    <option value="Office" <%=asset.category === 'Office' ?
+                        'selected' : '' %>>Office</option>
+                    <option value="Other" <%=asset.category === 'Other' ?
+                        'selected' : '' %>>Other</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Acquisition Type</label>
+                <select name="acquisition_type" class="form-select">
+                    <option value="Purchase" <%=(asset.acquisition_type ||
+                        'Purchase') === 'Purchase' ? 'selected' : ''
+                        %>>Purchase</option>
+                    <option value="Lease" <%=asset.acquisition_type === 'Lease'
+                        ? 'selected' : '' %>>Lease</option>
+                    <option value="Installment" <%=asset.acquisition_type ===
+                        'Installment' ? 'selected' : '' %>>Installment</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Supplier / Vendor</label>
+                <input type="text" name="supplier" class="form-control"
+                    value="<%= asset.supplier || '' %>">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Finance Provider</label>
+                <input type="text" name="finance_provider" class="form-control"
+                    value="<%= asset.finance_provider || '' %>">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Serial Number</label>
+                <input type="text" name="serial_no" class="form-control"
+                    value="<%= asset.serial_no || '' %>">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Location</label>
+                <input type="text" name="location" class="form-control"
+                    value="<%= asset.location || '' %>">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="Active" <%=(asset.status || 'Active') ===
+                        'Active' ? 'selected' : '' %>>Active</option>
+                    <option value="Leased" <%=asset.status === 'Leased' ?
+                        'selected' : '' %>>Leased</option>
+                    <option value="Installment" <%=asset.status ===
+                        'Installment' ? 'selected' : '' %>>Installment</option>
+                    <option value="Maintenance" <%=asset.status ===
+                        'Maintenance' ? 'selected' : '' %>>Maintenance</option>
+                    <option value="Disposed" <%=asset.status === 'Disposed' ?
+                        'selected' : '' %>>Disposed</option>
+                    <option value="Lost" <%=asset.status === 'Lost' ? 'selected'
+                        : '' %>>Lost</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Purchase Date</label>
+                <input type="date" name="purchase_date" class="form-control"
+                    value="<%= asset.purchase_date ? (asset.purchase_date.toISOString ? asset.purchase_date.toISOString().slice(0,10) : String(asset.purchase_date).slice(0,10)) : '' %>">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Lease Start</label>
+                <input type="date" name="lease_start_date" class="form-control"
+                    value="<%= asset.lease_start_date ? (asset.lease_start_date.toISOString ? asset.lease_start_date.toISOString().slice(0,10) : String(asset.lease_start_date).slice(0,10)) : '' %>">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Lease End</label>
+                <input type="date" name="lease_end_date" class="form-control"
+                    value="<%= asset.lease_end_date ? (asset.lease_end_date.toISOString ? asset.lease_end_date.toISOString().slice(0,10) : String(asset.lease_end_date).slice(0,10)) : '' %>">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Total Cost</label>
+                <input type="number" step="0.01" min="0" name="purchase_cost"
+                    class="form-control"
+                    value="<%= asset.purchase_cost || 0 %>">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Down Payment</label>
+                <input type="number" step="0.01" min="0" name="down_payment"
+                    class="form-control" value="<%= asset.down_payment || 0 %>">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Installment Amount</label>
+                <input type="number" step="0.01" min="0"
+                    name="installment_amount" class="form-control"
+                    value="<%= asset.installment_amount || 0 %>">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Period (Months)</label>
+                <input type="number" min="0" name="installment_period_months"
+                    class="form-control"
+                    value="<%= asset.installment_period_months || 0 %>">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Months Paid</label>
+                <input type="number" min="0" name="months_paid"
+                    class="form-control" value="<%= asset.months_paid || 0 %>">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Monthly Rental</label>
+                <input type="number" step="0.01" min="0" name="monthly_rental"
+                    class="form-control"
+                    value="<%= asset.monthly_rental || 0 %>">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Current Value</label>
+                <input type="number" step="0.01" min="0" name="current_value"
+                    class="form-control"
+                    value="<%= asset.current_value || 0 %>">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Notes</label>
+                <textarea name="notes" class="form-control"
+                    rows="3"><%= asset.notes || '' %></textarea>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="/assets" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>

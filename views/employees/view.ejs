@@ -1,0 +1,39 @@
+<%- include('../partials/header', { title: 'Employee Details' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Employee Details</h4>
+    <div>
+        <a href="/employees/<%= employee.id %>/edit"
+            class="btn btn-sm btn-outline-secondary">Edit</a>
+        <a href="/employees" class="btn btn-sm btn-outline-primary">Back</a>
+    </div>
+</div>
+
+<div class="card p-4" style="max-width:800px;">
+    <div class="row g-3">
+        <div class="col-md-6"><strong>Name:</strong> <%= employee.name %></div>
+        <div class="col-md-6"><strong>Position:</strong> <%= employee.position
+            || '-' %></div>
+        <div class="col-md-6"><strong>Phone:</strong> <%= employee.phone || '-'
+            %></div>
+        <div class="col-md-6"><strong>Email:</strong> <%= employee.email || '-'
+            %></div>
+        <div class="col-md-6"><strong>NIC:</strong> <%= employee.nic || '-'
+            %></div>
+        <div class="col-md-6"><strong>Join Date:</strong> <%= employee.join_date
+            ? employee.join_date.toISOString ?
+            employee.join_date.toISOString().slice(0,10) :
+            employee.join_date.slice(0,10) : '-' %></div>
+        <div class="col-md-6"><strong>Salary:</strong> LKR <%=
+            Number(employee.salary || 0).toLocaleString('en-LK', {
+            minimumFractionDigits: 2 }) %></div>
+        <div class="col-md-6"><strong>Status:</strong> <%= employee.status ||
+            'Active' %></div>
+        <div class="col-12"><strong>Address:</strong> <%= employee.address ||
+            '-' %></div>
+        <div class="col-12"><strong>Notes:</strong> <%= employee.notes || '-'
+            %></div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

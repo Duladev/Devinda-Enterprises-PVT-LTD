@@ -1,0 +1,50 @@
+<%- include('../partials/header', { title: 'Shareholders' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Shareholders</h4>
+    <a href="/shareholders/new" class="btn btn-primary btn-sm"><i
+            class="bi bi-plus-lg"></i> Add Shareholder</a>
+</div>
+
+<form class="mb-3" method="GET">
+    <input type="text" name="q" value="<%= search %>" class="form-control"
+        placeholder="Search by name, share type, phone or email...">
+</form>
+
+<div class="card p-3">
+    <table class="table table-hover align-middle">
+        <thead><tr><th>Name</th><th>Share
+                    Type</th><th>Shares</th><th>%</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+            <% shareholders.forEach(s => { %>
+            <tr>
+                <td><a href="/shareholders/<%= s.id %>"><%= s.name %></a></td>
+                <td><%= s.share_type || '-' %></td>
+                <td><%= Number(s.shares || 0).toLocaleString('en-LK', {
+                    minimumFractionDigits: 2 }) %></td>
+                <td><%= Number(s.share_percentage || 0).toLocaleString('en-LK',
+                    { minimumFractionDigits: 2 }) %>%</td>
+                <td><span class="badge bg-light text-dark"><%= s.status ||
+                        'Active' %></span></td>
+                <td class="text-end">
+                    <a href="/shareholders/<%= s.id %>/edit"
+                        class="btn btn-sm btn-outline-secondary"><i
+                            class="bi bi-pencil"></i></a>
+                    <form action="/shareholders/<%= s.id %>?_method=DELETE"
+                        method="POST" class="d-inline"
+                        onsubmit="return confirm('Delete this shareholder?');">
+                        <button class="btn btn-sm btn-outline-danger"><i
+                                class="bi bi-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+            <% if (shareholders.length === 0) { %>
+            <tr><td colspan="6" class="text-center text-muted">No shareholders
+                    found.</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,35 @@
+<%- include('../partials/header', { title: 'Purchases' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Purchases (Stock In)</h4>
+  <a href="/purchases/new" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> New Purchase</a>
+</div>
+
+<div class="card p-3">
+  <table class="table table-hover align-middle">
+    <thead><tr><th>Purchase No</th><th>Seller</th><th>Date</th><th>Total</th><th>Paid</th><th>Balance</th><th></th></tr></thead>
+    <tbody>
+    <% purchases.forEach(p => { %>
+      <tr>
+        <td><%= p.purchase_no %></td>
+        <td><%= p.seller_name || 'N/A' %></td>
+        <td><%= new Date(p.purchase_date).toLocaleDateString('en-GB') %></td>
+        <td><%= Number(p.total_amount).toFixed(2) %></td>
+        <td><%= Number(p.paid_amount).toFixed(2) %></td>
+        <td><%= Number(p.balance).toFixed(2) %></td>
+        <td class="text-end">
+          <a href="/purchases/<%= p.id %>" class="btn btn-sm btn-outline-primary">View</a>
+          <form action="/purchases/<%= p.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this purchase? Stock will be reversed.');">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+    <% if (purchases.length === 0) { %>
+      <tr><td colspan="7" class="text-center text-muted">No purchases recorded yet.</td></tr>
+    <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,39 @@
+<%- include('../partials/header', { title: buyer.name }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4><%= buyer.name %></h4>
+  <a href="/buyers/<%= buyer.id %>/edit" class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil"></i> Edit</a>
+</div>
+
+<div class="card p-3 mb-4">
+  <div class="row">
+    <div class="col-md-4"><strong>Phone:</strong> <%= buyer.phone || '-' %></div>
+    <div class="col-md-4"><strong>Address:</strong> <%= buyer.address || '-' %></div>
+    <div class="col-md-4"><strong>NIC:</strong> <%= buyer.nic || '-' %></div>
+  </div>
+</div>
+
+<h6 class="mb-2">Sales History</h6>
+<div class="card p-3">
+  <table class="table table-sm">
+    <thead><tr><th>Invoice No</th><th>Date</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    <% sales.forEach(s => { %>
+      <tr>
+        <td><%= s.invoice_no %></td>
+        <td><%= new Date(s.sale_date).toLocaleDateString('en-GB') %></td>
+        <td><%= Number(s.total_amount).toFixed(2) %></td>
+        <td><%= Number(s.paid_amount).toFixed(2) %></td>
+        <td><%= Number(s.balance).toFixed(2) %></td>
+        <td><span class="badge bg-<%= s.payment_status === 'Paid' ? 'success' : s.payment_status === 'Partial' ? 'warning' : 'danger' %>"><%= s.payment_status %></span></td>
+        <td><a href="/sales/<%= s.id %>" class="small">View</a></td>
+      </tr>
+    <% }) %>
+    <% if (sales.length === 0) { %>
+      <tr><td colspan="7" class="text-center text-muted">No sales yet.</td></tr>
+    <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

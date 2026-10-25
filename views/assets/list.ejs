@@ -1,0 +1,106 @@
+<%- include('../partials/header', { title: 'Assets' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Assets</h4>
+    <a href="/assets/new" class="btn btn-primary btn-sm"><i
+            class="bi bi-plus-lg"></i> Add Asset</a>
+</div>
+
+<form class="mb-3" method="GET">
+    <input type="text" name="q" value="<%= search %>" class="form-control"
+        placeholder="Search by name, category, serial, or financier...">
+</form>
+
+<div class="card p-3">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Finance</th>
+                <th>Amount</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% assets.forEach(asset => { %>
+            <tr>
+                <td>
+                    <div class="fw-semibold"><%= asset.name %></div>
+                    <small class="text-muted"><%= asset.category || '-'
+                        %></small>
+                </td>
+                <td><%= asset.acquisition_type || 'Purchase' %></td>
+                <td>
+                    <% if (asset.acquisition_type === 'Lease') { %>
+                    <small class="d-block"><%= asset.finance_provider ||
+                        'Lease provider' %></small>
+                    <small class="text-muted"><%= asset.lease_start_date ?
+                        (asset.lease_start_date.toISOString ?
+                        asset.lease_start_date.toISOString().slice(0,10) :
+                        String(asset.lease_start_date).slice(0,10)) :
+                        'No start date' %></small>
+                    <% } else if (asset.acquisition_type === 'Installment') { %>
+                    <small class="d-block"><%= asset.finance_provider ||
+                        'Installment provider' %></small>
+                    <small class="text-muted">Down: LKR <%=
+                        Number(asset.down_payment || 0).toLocaleString('en-LK',
+                        { minimumFractionDigits: 2 }) %></small>
+                    <% } else { %>
+                    <small class="text-muted"><%= asset.supplier ||
+                        'Cash purchase' %></small>
+                    <% } %>
+                </td>
+                <td>
+                    <small class="d-block">Total: LKR <%=
+                        Number(asset.purchase_cost || 0).toLocaleString('en-LK',
+                        { minimumFractionDigits: 2 }) %></small>
+                    <% if (asset.acquisition_type === 'Installment') { %>
+                    <small class="text-muted">Paid: LKR <%=
+                        Number(asset.totalPaid || 0).toLocaleString('en-LK', {
+                        minimumFractionDigits: 2 }) %></small>
+                    <% } else if (asset.acquisition_type === 'Lease') { %>
+                    <small class="text-muted">Rent: LKR <%=
+                        Number(asset.monthly_rental ||
+                        0).toLocaleString('en-LK', { minimumFractionDigits: 2 })
+                        %></small>
+                    <% } %>
+                </td>
+                <td><%= asset.location || '-' %></td>
+                <td>
+                    <% if (asset.status === 'Active' || asset.status ===
+                    'Leased' || asset.status === 'Installment') { %>
+                    <span class="badge bg-success"><%= asset.status %></span>
+                    <% } else if (asset.status === 'Maintenance') { %>
+                    <span class="badge bg-warning text-dark"><%= asset.status
+                        %></span>
+                    <% } else if (asset.status === 'Disposed') { %>
+                    <span class="badge bg-secondary"><%= asset.status %></span>
+                    <% } else { %>
+                    <span class="badge bg-danger"><%= asset.status %></span>
+                    <% } %>
+                </td>
+                <td class="text-end">
+                    <a href="/assets/<%= asset.id %>/edit"
+                        class="btn btn-sm btn-outline-secondary"><i
+                            class="bi bi-pencil"></i></a>
+                    <form action="/assets/<%= asset.id %>?_method=DELETE"
+                        method="POST" class="d-inline"
+                        onsubmit="return confirm('Delete this asset?');">
+                        <button class="btn btn-sm btn-outline-danger"><i
+                                class="bi bi-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+            <% if (assets.length === 0) { %>
+            <tr><td colspan="7" class="text-center text-muted">No assets
+                    found.</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../partials/footer') %>

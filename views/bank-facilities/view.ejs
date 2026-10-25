@@ -1,0 +1,66 @@
+<%- include('../partials/header', { title: facility.name || 'Bank Facility' })
+%>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4><%= facility.name || 'Bank Facility' %></h4>
+    <div>
+        <a href="/bank-facilities/<%= facility.id %>/edit"
+            class="btn btn-sm btn-outline-primary">Edit</a>
+        <a href="/bank-facilities"
+            class="btn btn-sm btn-outline-secondary">Back</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card p-3 h-100">
+            <div class="text-muted small">Facility Type</div>
+            <h6 class="mt-2 mb-0"><%= facility.facility_type || '-' %></h6>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-3 h-100">
+            <div class="text-muted small">Provider</div>
+            <h6 class="mt-2 mb-0"><%= facility.provider || '-' %></h6>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-3 h-100">
+            <div class="text-muted small">Linked Account</div>
+            <h6 class="mt-2 mb-0"><%= facility.account_name ||
+                facility.account_bank_name || '-' %></h6>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-3 h-100 bg-danger-subtle">
+            <div class="text-muted small">Outstanding</div>
+            <h5 class="mt-2 mb-0">LKR <%= Number(facility.outstanding_amount ||
+                0).toLocaleString('en-LK', { minimumFractionDigits: 2 }) %></h5>
+        </div>
+    </div>
+</div>
+
+<div class="card p-4">
+    <div class="row g-3">
+        <div class="col-md-6"><strong>Principal Amount:</strong> LKR <%=
+            Number(facility.principal_amount || 0).toLocaleString('en-LK', {
+            minimumFractionDigits: 2 }) %></div>
+        <div class="col-md-6"><strong>Interest Rate:</strong> <%=
+            Number(facility.interest_rate || 0).toLocaleString('en-LK', {
+            minimumFractionDigits: 2 }) %>%</div>
+        <div class="col-md-6"><strong>Installment Amount:</strong> LKR <%=
+            Number(facility.installment_amount || 0).toLocaleString('en-LK', {
+            minimumFractionDigits: 2 }) %></div>
+        <div class="col-md-6"><strong>Status:</strong> <%= facility.status ||
+            'Active' %></div>
+        <div class="col-md-6"><strong>Start Date:</strong> <%=
+            facility.start_date ? new
+            Date(facility.start_date).toISOString().slice(0,10) : '-' %></div>
+        <div class="col-md-6"><strong>End Date:</strong> <%= facility.end_date ?
+            new Date(facility.end_date).toISOString().slice(0,10) : '-' %></div>
+        <div class="col-12"><strong>Notes:</strong> <%= facility.notes || '-'
+            %></div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

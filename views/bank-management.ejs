@@ -1,0 +1,190 @@
+<%- include('partials/header', { title: 'Bank Management' }) %>
+
+<main class="bank-management-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1">Bank Management</h4>
+            <p class="text-muted mb-0">Corporate banking overview, cheque
+                tracking, and financing portfolio</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="/bank-accounts" class="btn btn-outline-primary btn-sm"><i class="bi bi-bank me-1"></i>Accounts &amp; cashflow</a>
+            <a href="/bank-accounts/new" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Add account</a>
+            <a href="/cheques" class="btn btn-outline-secondary btn-sm">Cheques</a>
+            <a href="/bank-facilities" class="btn btn-outline-secondary btn-sm">Facilities</a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card p-3 border-0 bg-primary-subtle h-100">
+                <div class="text-muted small">Total Accounts</div>
+                <h3 class="mt-2 mb-0"><%= totalAccounts %></h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 border-0 bg-success-subtle h-100">
+                <div class="text-muted small">Available Balance</div>
+                <h3 class="mt-2 mb-0">LKR <%= Number(totalAvailableBalance ||
+                    0).toLocaleString('en-LK', { minimumFractionDigits: 2 })
+                    %></h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 border-0 bg-warning-subtle h-100">
+                <div class="text-muted small">Cheques</div>
+                <h3 class="mt-2 mb-0"><%= totalCheques %></h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 border-0 bg-danger-subtle h-100">
+                <div class="text-muted small">Facilities Outstanding</div>
+                <h3 class="mt-2 mb-0">LKR <%= Number(totalOutstandingFacilities
+                    || 0).toLocaleString('en-LK', { minimumFractionDigits: 2 })
+                    %></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-5">
+            <div class="card p-3 h-100">
+                <h6 class="mb-3">Bank Accounts</h6>
+                <% if (accounts.length === 0) { %>
+                <p class="text-muted small mb-0">No bank accounts created
+                    yet.</p>
+                <% } else { %>
+                <div class="list-group list-group-flush">
+                    <% accounts.forEach(account => { %>
+                    <div
+                        class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <div>
+                            <a class="fw-semibold text-decoration-none" href="/bank-accounts/<%= account.id %>"><%= account.name %></a>
+                            <small class="text-muted"><%= account.bank_name %> •
+                                <%= account.account_type || 'Current' %></small>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-semibold">LKR <%=
+                                Number(account.current_balance ||
+                                0).toLocaleString('en-LK', {
+                                minimumFractionDigits: 2 }) %></div>
+                            <small class="text-muted"><%= account.account_number
+                                || '-' %></small>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card p-3 h-100">
+                <h6 class="mb-3">Recent Bank Transactions</h6>
+                <% if (recentTransactions.length === 0) { %>
+                <p class="text-muted small mb-0">No account transactions
+                    recorded yet.</p>
+                <% } else { %>
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% recentTransactions.forEach(tx => { %>
+                        <tr>
+                            <td><%= tx.account_name || '-' %></td>
+                            <td><%= tx.transaction_date ? new
+                                Date(tx.transaction_date).toISOString().slice(0,10)
+                                : '-' %></td>
+                            <td><span
+                                    class="badge <%= tx.type === 'IN' ? 'bg-success' : 'bg-danger' %>"><%=
+                                    tx.type === 'IN' ? 'Deposit' : 'Withdrawal'
+                                    %></span></td>
+                            <td>LKR <%= Number(tx.amount ||
+                                0).toLocaleString('en-LK', {
+                                minimumFractionDigits: 2 }) %></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card p-3 h-100">
+                <h6 class="mb-3">Pending Cheques</h6>
+                <% if (pendingCheques.length === 0) { %>
+                <p class="text-muted small mb-0">No pending cheque items.</p>
+                <% } else { %>
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>Cheque</th>
+                            <th>Payee</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% pendingCheques.forEach(item => { %>
+                        <tr>
+                            <td><%= item.cheque_no %></td>
+                            <td><%= item.payee %></td>
+                            <td>LKR <%= Number(item.amount ||
+                                0).toLocaleString('en-LK', {
+                                minimumFractionDigits: 2 }) %></td>
+                            <td><span class="badge bg-light text-dark"><%=
+                                    item.status %></span></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card p-3 h-100">
+                <h6 class="mb-3">Bank Facilities Portfolio</h6>
+                <% if (facilitySummary.length === 0) { %>
+                <p class="text-muted small mb-0">No financing facilities
+                    recorded.</p>
+                <% } else { %>
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>Facility</th>
+                            <th>Type</th>
+                            <th>Outstanding</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% facilitySummary.forEach(item => { %>
+                        <tr>
+                            <td><%= item.name %></td>
+                            <td><%= item.facility_type %></td>
+                            <td>LKR <%= Number(item.outstanding_amount ||
+                                0).toLocaleString('en-LK', {
+                                minimumFractionDigits: 2 }) %></td>
+                            <td><span class="badge bg-light text-dark"><%=
+                                    item.status %></span></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

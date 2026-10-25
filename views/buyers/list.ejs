@@ -1,0 +1,37 @@
+<%- include('../partials/header', { title: 'Buyers' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Buyers</h4>
+  <a href="/buyers/new" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Add Buyer</a>
+</div>
+
+<form class="mb-3" method="GET">
+  <input type="text" name="q" value="<%= search %>" class="form-control" placeholder="Search by name or phone...">
+</form>
+
+<div class="card p-3">
+  <table class="table table-hover align-middle">
+    <thead><tr><th>Name</th><th>Phone</th><th>Address</th><th>NIC</th><th></th></tr></thead>
+    <tbody>
+    <% buyers.forEach(b => { %>
+      <tr>
+        <td><a href="/buyers/<%= b.id %>"><%= b.name %></a></td>
+        <td><%= b.phone || '-' %></td>
+        <td><%= b.address || '-' %></td>
+        <td><%= b.nic || '-' %></td>
+        <td class="text-end">
+          <a href="/buyers/<%= b.id %>/edit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+          <form action="/buyers/<%= b.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this buyer?');">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+    <% if (buyers.length === 0) { %>
+      <tr><td colspan="5" class="text-center text-muted">No buyers found.</td></tr>
+    <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

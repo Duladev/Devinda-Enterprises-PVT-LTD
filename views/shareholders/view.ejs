@@ -1,0 +1,39 @@
+<%- include('../partials/header', { title: 'Shareholder Details' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Shareholder Details</h4>
+    <div>
+        <a href="/shareholders/<%= shareholder.id %>/edit"
+            class="btn btn-sm btn-outline-secondary">Edit</a>
+        <a href="/shareholders" class="btn btn-sm btn-outline-primary">Back</a>
+    </div>
+</div>
+
+<div class="card p-4" style="max-width:800px;">
+    <div class="row g-3">
+        <div class="col-md-6"><strong>Name:</strong> <%= shareholder.name
+            %></div>
+        <div class="col-md-6"><strong>Share Type:</strong> <%=
+            shareholder.share_type || '-' %></div>
+        <div class="col-md-6"><strong>Shares:</strong> <%=
+            Number(shareholder.shares || 0).toLocaleString('en-LK', {
+            minimumFractionDigits: 2 }) %></div>
+        <div class="col-md-6"><strong>Share Percentage:</strong> <%=
+            Number(shareholder.share_percentage || 0).toLocaleString('en-LK', {
+            minimumFractionDigits: 2 }) %>%</div>
+        <div class="col-md-6"><strong>Phone:</strong> <%= shareholder.phone ||
+            '-' %></div>
+        <div class="col-md-6"><strong>Email:</strong> <%= shareholder.email ||
+            '-' %></div>
+        <div class="col-md-6"><strong>NIC:</strong> <%= shareholder.nic || '-'
+            %></div>
+        <div class="col-md-6"><strong>Status:</strong> <%= shareholder.status ||
+            'Active' %></div>
+        <div class="col-12"><strong>Address:</strong> <%= shareholder.address ||
+            '-' %></div>
+        <div class="col-12"><strong>Notes:</strong> <%= shareholder.notes || '-'
+            %></div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

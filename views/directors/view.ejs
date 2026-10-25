@@ -1,0 +1,36 @@
+<%- include('../partials/header', { title: 'Director Details' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Director Details</h4>
+    <div>
+        <a href="/directors/<%= director.id %>/edit"
+            class="btn btn-sm btn-outline-secondary">Edit</a>
+        <a href="/directors" class="btn btn-sm btn-outline-primary">Back</a>
+    </div>
+</div>
+
+<div class="card p-4" style="max-width:800px;">
+    <div class="row g-3">
+        <div class="col-md-6"><strong>Name:</strong> <%= director.name %></div>
+        <div class="col-md-6"><strong>Designation:</strong> <%=
+            director.designation || '-' %></div>
+        <div class="col-md-6"><strong>Phone:</strong> <%= director.phone || '-'
+            %></div>
+        <div class="col-md-6"><strong>Email:</strong> <%= director.email || '-'
+            %></div>
+        <div class="col-md-6"><strong>NIC:</strong> <%= director.nic || '-'
+            %></div>
+        <div class="col-md-6"><strong>Appointment Date:</strong> <%=
+            director.appointment_date ? director.appointment_date.toISOString ?
+            director.appointment_date.toISOString().slice(0,10) :
+            director.appointment_date.slice(0,10) : '-' %></div>
+        <div class="col-md-6"><strong>Status:</strong> <%= director.status ||
+            'Active' %></div>
+        <div class="col-12"><strong>Address:</strong> <%= director.address ||
+            '-' %></div>
+        <div class="col-12"><strong>Notes:</strong> <%= director.notes || '-'
+            %></div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,62 @@
+<%- include('../partials/header', { title: 'Bank Accounts' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Bank Accounts</h4>
+    <a href="/bank-accounts/new" class="btn btn-primary btn-sm"><i
+            class="bi bi-plus-lg"></i> Add Account</a>
+</div>
+
+<form class="mb-3" method="GET">
+    <input type="text" name="q" value="<%= search %>" class="form-control"
+        placeholder="Search by bank, branch, number or account name...">
+</form>
+
+<div class="card p-3">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Account</th>
+                <th>Bank</th>
+                <th>Account No</th>
+                <th>Type</th>
+                <th>Balance</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% accounts.forEach(account => { %>
+            <tr>
+                <td><a href="/bank-accounts/<%= account.id %>"><%= account.name
+                        || 'BOC Current Account' %></a></td>
+                <td><%= account.bank_name || 'Bank of Ceylon' %></td>
+                <td><%= account.account_number || '-' %></td>
+                <td><%= account.account_type || 'Current' %></td>
+                <td class="fw-semibold">LKR <%= Number(account.current_balance
+                    || 0).toLocaleString('en-LK', { minimumFractionDigits: 2 })
+                    %></td>
+                <td class="text-end">
+                    <a href="/bank-accounts/<%= account.id %>"
+                        class="btn btn-sm btn-outline-primary"><i
+                            class="bi bi-eye"></i></a>
+                    <a href="/bank-accounts/<%= account.id %>/edit"
+                        class="btn btn-sm btn-outline-secondary"><i
+                            class="bi bi-pencil"></i></a>
+                    <form
+                        action="/bank-accounts/<%= account.id %>?_method=DELETE"
+                        method="POST" class="d-inline"
+                        onsubmit="return confirm('Delete this bank account?');">
+                        <button class="btn btn-sm btn-outline-danger"><i
+                                class="bi bi-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+            <% if (accounts.length === 0) { %>
+            <tr><td colspan="6" class="text-center text-muted">No bank accounts
+                    found.</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../partials/footer') %>
